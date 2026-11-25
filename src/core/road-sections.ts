@@ -183,8 +183,7 @@ export interface RoadOverrides {
   walkKindRight?: string;
   /**
    * Parking bays along a side (a walked one): the kerb steps back {@link BAY_WIDTH} into the
-   * sidewalk to make a strip of asphalt, bays painted on it (beside
-   * `Road_Small_03`).
+   * sidewalk to make a strip of asphalt, bays painted on it.
    */
   parkingLeft?: boolean;
   parkingRight?: boolean;
