@@ -83,9 +83,10 @@ export function buildGround(city: CityData, palette: CityPalette = DEFAULT_PALET
   const size = Math.max(maxX - minX, maxZ - minZ) * 4;
   const geometry = new PlaneGeometry(size, size);
   geometry.rotateX(-Math.PI / 2);
-  const mesh = new Mesh(geometry, new MeshStandardMaterial({ color: palette.ground, roughness: 1 }));
+  // Pushed back in depth so road surfaces win over it at any distance (no z-fighting far away).
+  const mesh = new Mesh(geometry, new MeshStandardMaterial({ color: palette.ground, roughness: 1, polygonOffset: true, polygonOffsetFactor: 4, polygonOffsetUnits: 4 }));
   mesh.name = "ground";
-  mesh.position.set((minX + maxX) / 2, -0.02, (minZ + maxZ) / 2);
+  mesh.position.set((minX + maxX) / 2, -0.05, (minZ + maxZ) / 2);
   mesh.receiveShadow = shadows;
   return mesh;
 }
@@ -98,18 +99,21 @@ export function buildRoadMeshes(city: CityData, palette: CityPalette = DEFAULT_P
   const arrays = new RoadGeometry(city.terrain).buildArrays();
   const group = new Group();
   group.name = "roads";
-  const flat = (color: string, extra: Partial<ConstructorParameters<typeof MeshStandardMaterial>[0]> = {}): MeshStandardMaterial =>
-    new MeshStandardMaterial({ color, roughness: 0.95, metalness: 0, ...extra });
+  // Each surface gets its own depth layer (polygon offset scales with depth precision, so it holds
+  // far away where small height gaps between overlapping surfaces collapse): ground < lawns and
+  // shoulders < asphalt < paving < paint.
+  const flat = (color: string, layer: number, extra: Partial<ConstructorParameters<typeof MeshStandardMaterial>[0]> = {}): MeshStandardMaterial =>
+    new MeshStandardMaterial({ color, roughness: 0.95, metalness: 0, polygonOffset: true, polygonOffsetFactor: -layer, polygonOffsetUnits: -layer * 2, ...extra });
   const materials: Record<RoadSlot, MeshStandardMaterial> = {
-    asphalt: flat(palette.asphalt, { roughness: 0.9 }),
-    lots: flat(palette.asphalt, { roughness: 0.9 }),
-    dirt: flat(palette.dirt),
-    paint: flat("#ffffff", { vertexColors: true, roughness: 0.7, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }),
-    walk: flat(palette.sidewalk),
-    concrete: flat(palette.concrete),
-    shoulder: flat(palette.shoulder),
-    roadside: flat("#ffffff", { vertexColors: true }),
-    median: flat(palette.median),
+    roadside: flat("#ffffff", 0, { vertexColors: true }),
+    shoulder: flat(palette.shoulder, 0),
+    dirt: flat(palette.dirt, 0),
+    median: flat(palette.median, 1),
+    lots: flat(palette.asphalt, 1, { roughness: 0.9 }),
+    asphalt: flat(palette.asphalt, 2, { roughness: 0.9 }),
+    walk: flat(palette.sidewalk, 3),
+    concrete: flat(palette.concrete, 3),
+    paint: flat("#ffffff", 5, { vertexColors: true, roughness: 0.7 }),
   };
   for (const [slot, made] of Object.entries(arrays) as [RoadSlot, NonNullable<(typeof arrays)[RoadSlot]>][]) {
     const geometry = new BufferGeometry();

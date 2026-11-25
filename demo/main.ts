@@ -194,6 +194,14 @@ addEventListener("resize", () => {
 let frames = 0;
 renderer.setAnimationLoop(() => {
   controls.update();
+  // Near plane follows the orbit distance: depth precision stays fine far out, close-ups still work.
+  const distance = camera.position.distanceTo(controls.target);
+  const near = Math.min(Math.max(0.5, distance * 0.05), Math.max(0.5, camera.position.y * 0.5));
+  if (Math.abs(near - camera.near) > 0.01) {
+    camera.near = near;
+    camera.far = Math.max(2000, distance * 6);
+    camera.updateProjectionMatrix();
+  }
   renderer.render(scene, camera);
   // Signals a screenshot tool that the first frames are in.
   if (++frames === 3) document.body.dataset.ready = "1";
