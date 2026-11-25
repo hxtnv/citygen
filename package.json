@@ -4,14 +4,36 @@
   "description": "Procedural town and city generator for three.js: street networks, blocks, lots, sidewalks, lane markings and buildings.",
   "license": "MIT",
   "author": "hxtnv",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hxtnv/citygen.git"
+  },
+  "homepage": "https://hxtnv.github.io/citygen/",
+  "bugs": "https://github.com/hxtnv/citygen/issues",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
   "scripts": {
     "dev": "vite demo",
-    "build": "vite build demo",
+    "build": "rm -rf dist && vite build -c vite.lib.config.ts && tsc -p tsconfig.build.json",
+    "build:demo": "vite build demo",
     "typecheck": "tsc --noEmit",
+    "test": "bun test",
     "screenshots": "node scripts/screenshots.mjs",
-    "test": "bun test"
+    "prepublishOnly": "bun run typecheck && bun test && bun run build"
   },
   "peerDependencies": {
     "three": ">=0.160.0"
@@ -32,6 +54,11 @@
     "town",
     "generator",
     "roads",
-    "streets"
+    "streets",
+    "procedural-generation",
+    "city-generator",
+    "road-network",
+    "webgl",
+    "gamedev"
   ]
 }

@@ -2,6 +2,22 @@
 
 <p align="center"><b>Procedural towns and cities for three.js: street networks, blocks, lots, sidewalks, lane markings and buildings, from a single seed.</b></p>
 
+<p align="center">
+  <a href="https://hxtnv.github.io/citygen/"><b>Live demo</b></a> ·
+  <a href="#install">Install</a> ·
+  <a href="#usage">Usage</a> ·
+  <a href="#settings">Settings</a> ·
+  <a href="#bring-your-own-models">Bring your own models</a>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/citygen"><img src="https://img.shields.io/npm/v/citygen?color=7c3aed" alt="npm"></a>
+  <a href="https://github.com/hxtnv/citygen/actions/workflows/ci.yml"><img src="https://github.com/hxtnv/citygen/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://bundlephobia.com/package/citygen"><img src="https://img.shields.io/bundlephobia/minzip/citygen?label=minzip" alt="size"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
+  <img src="https://img.shields.io/badge/three.js-%E2%89%A50.160-black" alt="three.js >= 0.160">
+</p>
+
 <p align="center"><img src="docs/hero.png" alt="A generated city: a downtown of towers on a street grid, shops round it, suburbs of houses on curving streets and cul-de-sacs" width="100%"></p>
 
 <table>
@@ -25,10 +41,20 @@
 - **No assets.** Everything is procedural geometry. Buildings are instanced boxes with a window shader; swap in your own models in a few lines.
 - **Deterministic and fast.** Same settings, same town. A full city generates and meshes in well under 100 ms each.
 
-## Quick start
+## Install
 
 ```bash
-git clone <this repo> citygen
+npm install citygen three
+```
+
+Ships as one ES module with TypeScript types. `three` is a peer dependency.
+
+## Run the demo
+
+Try it online at **[hxtnv.github.io/citygen](https://hxtnv.github.io/citygen/)**, or locally:
+
+```bash
+git clone https://github.com/hxtnv/citygen.git
 cd citygen
 bun install        # or: npm install
 bun run dev        # or: npm run dev    -> http://localhost:5199
@@ -40,11 +66,9 @@ The demo has a panel for every setting below, camera presets, and takes the sett
 
 ## Usage
 
-The library is plain TypeScript source (no build step). Copy `src/` into your project or import it directly; `three` is the only dependency.
-
 ```ts
 import * as THREE from "three";
-import { generateCity, buildCityMeshes } from "./citygen/src";
+import { generateCity, buildCityMeshes } from "citygen";
 
 const city = generateCity({ seed: 7, character: "city", width: 560, depth: 460 });
 scene.add(buildCityMeshes(city));
