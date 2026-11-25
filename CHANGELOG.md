@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- New `citygen/core` entry: the generator alone, plain data out, no three.js import.
+- `three` is now an optional peer dependency, needed only for the mesh builders in `citygen`.
+
 ## 0.1.0 - 2026-11-25
 
 First release.

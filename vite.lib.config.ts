@@ -7,7 +7,8 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: false,
     minify: false,
-    lib: { entry: "src/index.ts", formats: ["es"], fileName: () => "index.js" },
-    rollupOptions: { external: (id) => id === "three" || id.startsWith("three/") },
+    lib: { entry: { index: "src/index.ts", core: "src/core.ts" }, formats: ["es"], fileName: (_format, name) => `${name}.js` },
+    rollupOptions: {
+      output: { chunkFileNames: "shared-[name].js" }, external: (id) => id === "three" || id.startsWith("three/") },
   },
 });

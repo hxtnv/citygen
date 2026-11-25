@@ -47,7 +47,7 @@
 npm install citygen three
 ```
 
-Ships as one ES module with TypeScript types. `three` is a peer dependency.
+Ships as ES modules with TypeScript types. `three` is an optional peer dependency: only the mesh builders need it (see [Without three.js](#without-threejs)).
 
 ## Run the demo
 
@@ -82,6 +82,21 @@ city.trees;            // { x, y, z, scale }
 ```
 
 `buildCityMeshes` is a thin layer over separate builders you can use on their own: `buildRoadMeshes`, `buildBuildingMeshes`, `buildTreeMeshes`, `buildGround`. Pass `{ palette: { asphalt: "#333", ... } }` to recolour, or `{ shadows: false }`.
+
+### Without three.js
+
+The generator itself does not touch three.js: it returns plain data (road centre lines and widths, junction outlines, blocks, lots, buildings with position, rotation and size). Import it from `citygen/core` and draw it with anything: Babylon.js, PlayCanvas, a 2D canvas map, or an export to Unity or Blender.
+
+```ts
+import { generateCity } from "citygen/core"; // no three.js needed
+
+const city = generateCity({ seed: 7, character: "village" });
+for (const b of city.buildings) {
+  // b.x, b.z, b.yaw, b.width, b.depth, b.height, b.kind, b.district
+}
+```
+
+three.js is the built-in renderer: `citygen` adds `buildCityMeshes` and the other mesh builders on top of everything in `citygen/core`.
 
 ## Settings
 

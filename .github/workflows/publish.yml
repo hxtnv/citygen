@@ -1,0 +1,38 @@
+name: Publish
+
+# Publishes to npm when main has a package.json version that is not on npm yet.
+# Auth: npm trusted publishing (OIDC), no token. Set it up once on npmjs.com:
+# package settings > Trusted publisher > GitHub Actions, repo hxtnv/citygen, workflow publish.yml.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - id: check
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if npm view "citygen@$version" version >/dev/null 2>&1; then
+            echo "citygen@$version is already on npm, skipping"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.publish == 'true'
+        run: bun install --frozen-lockfile
+      - if: steps.check.outputs.publish == 'true'
+        run: npm publish
