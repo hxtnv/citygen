@@ -28,7 +28,7 @@ export type CentreLine = "auto" | "dashed" | "solid" | "double" | "solid-dashed"
  * `grass` island (kerbed, turf on top), a concrete `barrier` (Street Racer's jersey barrier down
  * its middle, a yellow line each side), or a `planted` one: a walk kind's kerb pieces back to back
  * (facing out), paved between, with what is planted and stood on it laid along it at a spacing (a
- * {@link PlantedMedian}: Palm City's planter beds, hedges, palms and lamps down a boulevard). Every kind but `none` opens at a junction: it ends short of
+ * {@link PlantedMedian}: planter beds, hedges, palms and lamps down a boulevard). Every kind but `none` opens at a junction: it ends short of
  * it with a rounded nose (an island) or the barrier's end, so traffic can turn across there and
  * nowhere else (`lanes.ts`).
  */
@@ -183,7 +183,7 @@ export interface RoadOverrides {
   walkKindRight?: string;
   /**
    * Parking bays along a side (a walked one): the kerb steps back {@link BAY_WIDTH} into the
-   * sidewalk to make a strip of asphalt, bays painted on it (Palm City's `Road_Small_02` beside
+   * sidewalk to make a strip of asphalt, bays painted on it (beside
    * `Road_Small_03`).
    */
   parkingLeft?: boolean;

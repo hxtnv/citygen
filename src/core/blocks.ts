@@ -28,7 +28,7 @@ export type District = (typeof DISTRICTS)[number];
 
 /**
  * What a block's ground is, whatever stands on it: `pavement` (a walk kind's fill piece,
- * Palm City's or City's `SM_Env_Sidewalk_01`, tiled from the sidewalk's back edge inwards: a
+ * a sidewalk paving tile, tiled from the sidewalk's back edge inwards: a
  * city block buildings stand on), `park` (a lawn with trees), `lot` (a parking lot: asphalt, rows
  * of painted bays with aisles, planted islands and lamps, ways in from its streets: `parking-lot.ts`), or `none` (the
  * ground as it is: for buildings, or nothing yet).
